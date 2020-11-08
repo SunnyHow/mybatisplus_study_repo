@@ -43,4 +43,39 @@ public class MybatisPlusApplicationTest {
         System.out.println(result);
     }
 
+    /**
+     * 测试乐观锁成功
+     */
+    @Test
+    public void testOptimisticLocker(){
+        // 1、查询用户信息
+        User user = userMapper.selectById(1L);
+        // 2、修改用户信息
+        user.setName("kuangshen");
+        user.setEmail("24736743@qq.com");
+        // 3、执行更新操作
+        userMapper.updateById(user);
+    }
+
+    /**
+     * 测试乐观锁失败 多线程下
+     */
+    @Test
+    public void testOptimisticLocker2(){
+        // 线程1
+        User user = userMapper.selectById(1L);
+        user.setName("kuangshen111");
+        user.setEmail("24736743@qq.com");
+
+        // 模拟另外一个线程执行了插队操作
+        User user2 = userMapper.selectById(1L);
+        user.setName("kuangshen222");
+        user.setEmail("24736743@qq.com");
+        userMapper.updateById(user2);
+
+        // 如果没有乐观锁就会覆盖插队线程的值
+        // 自旋锁来尝试多次提交！
+        userMapper.updateById(user);
+    }
+
 }
