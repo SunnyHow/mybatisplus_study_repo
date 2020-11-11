@@ -1,3 +1,4 @@
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sun.mybatisplus.MybatisPlusApplication;
 import com.sun.mybatisplus.mapper.UserMapper;
 import com.sun.mybatisplus.pojo.User;
@@ -5,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 @SpringBootTest(classes = MybatisPlusApplication.class)
@@ -76,6 +79,52 @@ public class MybatisPlusApplicationTest {
         // 如果没有乐观锁就会覆盖插队线程的值
         // 自旋锁来尝试多次提交！
         userMapper.updateById(user);
+    }
+
+    /**
+     * 测试查询
+     */
+    @Test
+    public void testSelectById(){
+        User user = userMapper.selectById(1L);
+        System.out.println(user);
+    }
+
+    /**
+     * 测试批量查询
+     */
+    @Test
+    public void testSelectByBatchIds(){
+        List<User> users = userMapper.selectBatchIds(Arrays.asList(1,2,3));
+        users.forEach(System.out::println);
+    }
+
+    /**
+     * 条件查询之一-使用map操作
+     */
+    @Test
+    public void testSelectByMap(){
+        HashMap<String, Object> map = new HashMap<>();
+        // 自定义要查询的条件
+        map.put("name","kuangshen");
+        List<User> users = userMapper.selectByMap(map);
+        users.forEach(System.out::println);
+    }
+
+    /**
+     * 测试分页查询
+     */
+    @Test
+    public void testPage(){
+        /*
+         * @Param 当前页
+         * @Param 页面大小
+         */
+        Page<User> page = new Page<>(1,5);
+        userMapper.selectPage(page,null);
+
+        page.getRecords().forEach(System.out::println);
+        System.out.println(page.getTotal());
     }
 
 }
