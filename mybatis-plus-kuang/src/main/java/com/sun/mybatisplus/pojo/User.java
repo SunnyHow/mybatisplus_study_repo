@@ -21,6 +21,9 @@ public class User {
     // 乐观锁Version注解
     @Version
     private Integer version;
+    // 逻辑删除
+    @TableLogic
+    private Integer deleted;
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
     @TableField(fill = FieldFill.INSERT_UPDATE)

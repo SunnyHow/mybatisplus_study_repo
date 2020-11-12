@@ -86,7 +86,7 @@ public class MybatisPlusApplicationTest {
      */
     @Test
     public void testSelectById(){
-        User user = userMapper.selectById(1L);
+        User user = userMapper.selectById(3L);
         System.out.println(user);
     }
 
@@ -125,6 +125,32 @@ public class MybatisPlusApplicationTest {
 
         page.getRecords().forEach(System.out::println);
         System.out.println(page.getTotal());
+    }
+
+    /**
+     * 测试删除
+     */
+    @Test
+    public void testDeleteById(){
+        userMapper.deleteById(5L);
+    }
+
+    /**
+     * 通过id批量删除
+     */
+    @Test
+    public void testDeleteBatchIds(){
+        userMapper.deleteBatchIds(Arrays.asList(3,4));
+    }
+
+    /**
+     * 通过map删除
+     */
+    @Test
+    public void testDeleteByMap(){
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("name","Billie");
+        userMapper.deleteByMap(map);
     }
 
 }
